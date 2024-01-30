@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "EYEPOP SDK DEV",
+            "type": "chrome",
+            "request": "launch",
+            "runtimeExecutable": "C://Users//edmun//AppData//Local//BraveSoftware//Brave-Browser//Application//brave.exe",
+            "url": "http://127.0.0.1:8081/",
+            "webRoot": "${workspaceFolder}",
+
+            "port": 9222,
+            "runtimeArgs": [
+                "--remote-debugging-port=9222",
+            ],
+        },
+    ]
+}
+
