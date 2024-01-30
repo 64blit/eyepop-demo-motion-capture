@@ -4,7 +4,7 @@
     "description": "Node.js web server using 'http' built-in module.",
     "main": "src/index.js",
     "scripts": {
-        "run": "nodemon index.js"
+        "dev": "nodemon index.js"
     },
     "devDependencies": {
         "nodemon": "^3.0.3"
