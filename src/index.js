@@ -4,6 +4,8 @@ const path = require("path");
 
 const port = 3000;
 const staticPath = path.join(__dirname, "../");
+app.use(express.static(staticPath));
+console.log("Serving on path: ", staticPath);
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(staticPath, "1_motion_capture.html"));
