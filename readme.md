@@ -9,6 +9,7 @@ A realtime motion capture demo in the browser using the simple low code EyePop p
 - Log into your EyePop account at https://dashboard.eyepop.ai/sign-in
 - Create your own **API Pop** and select _Live - People and Common Object_ from the object library
 - Check out the **API Info** section of your Pop and copy'n paste the `endpoint` and `Auth Token` into `config.js` of your local copy of this repo.
+- Edit the `model.js` file with your own mixamorig enabled rig file path. Either fork this sandbox and upload your own model or replace the path with a link.
 
 ### Need a Web Server locally to test?
 
