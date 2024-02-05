@@ -1,10 +1,11 @@
+//
+// 1. Login to your EyePop.ai account
+// 2. Create a POP, then copy and paste the UUID
+//
+// 3. Enter the UUID here
+//
 const pop_uuid = "";
-const pop_endpoint =
-  "https://staging-api.eyepop.ai/pops/" + pop_uuid + "/config?auto_start=true";
-
-// Do not expose your API key in production! You can leave this blank in development.
+//
+// 4. Then, create a secrete API key and paste it here
+//
 const api_key = "";
-// You can create a temporary token for your users to authenticate with. Keeping this blank in development will allow you to login to authenticate.
-// https://docs.eyepop.ai/developer-documentation/api-key
-const token = "";
-var config = {};
