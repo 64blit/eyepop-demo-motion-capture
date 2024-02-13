@@ -9,82 +9,68 @@ import { gsap } from "https://cdn.skypack.dev/gsap";
 
 var jointNodes = {
   mixamorigLeftShoulder: {
-    poseParent: ["left shoulder", "right shoulder"],
-    poseChild: ["left shoulder"],
-    quatCorrection: [0, 0, 0],
-    transformAxis: [0, 0, 0],
+    poseParent: [ "left shoulder", "right shoulder" ],
+    poseChild: [ "left shoulder" ],
+    quatCorrection: [ 0, 0, 0 ],
+    transformAxis: [ 0, 0, 0 ],
   },
   mixamorigLeftArm: {
-    poseParent: ["left shoulder"],
-    poseChild: ["left elbow"],
-    quatCorrection: [0, 0, 0],
-    transformAxis: [0, 0, 0],
+    poseParent: [ "left shoulder" ],
+    poseChild: [ "left elbow" ],
+    quatCorrection: [ 0, 0, 0 ],
+    transformAxis: [ 0, 0, 0 ],
   },
   mixamorigLeftForeArm: {
-    poseParent: ["left elbow"],
-    poseChild: ["left wrist"],
-    transformAxis: [0, 0, 0],
-    quatCorrection: [0, 0, 0],
+    poseParent: [ "left elbow" ],
+    poseChild: [ "left wrist" ],
+    transformAxis: [ 0, 0, 0 ],
+    quatCorrection: [ 0, 0, 0 ],
   },
   mixamorigLeftHand: {
-    poseParent: ["left wrist"],
-    poseChild: ["left thumb"],
-    transformAxis: [0, 0, 0],
-    quatCorrection: [0, 0, 0],
+    poseParent: [ "left wrist" ],
+    poseChild: [ "left thumb" ],
+    transformAxis: [ 0, 0, 0 ],
+    quatCorrection: [ 0, 0, 0 ],
   },
   mixamorigRightShoulder: {
-    poseParent: ["left shoulder", "right shoulder"],
-    poseChild: ["right shoulder"],
-    quatCorrection: [0, 0, 0],
-    transformAxis: [0, 0, 0],
+    poseParent: [ "left shoulder", "right shoulder" ],
+    poseChild: [ "right shoulder" ],
+    quatCorrection: [ 0, 0, 0 ],
+    transformAxis: [ 0, 0, 0 ],
   },
   mixamorigRightArm: {
-    poseParent: ["right shoulder"],
-    poseChild: ["right elbow"],
-    quatCorrection: [0, 0, 0],
-    transformAxis: [0, 0, 0],
+    poseParent: [ "right shoulder" ],
+    poseChild: [ "right elbow" ],
+    quatCorrection: [ 0, 0, 0 ],
+    transformAxis: [ 0, 0, 0 ],
   },
   mixamorigRightForeArm: {
-    poseParent: ["right elbow"],
-    poseChild: ["right wrist"],
-    transformAxis: [0, 0, 0],
-    quatCorrection: [0, 0, 0],
+    poseParent: [ "right elbow" ],
+    poseChild: [ "right wrist" ],
+    transformAxis: [ 0, 0, 0 ],
+    quatCorrection: [ 0, 0, 0 ],
   },
   mixamorigSpine1: {
-    poseParent: ["left hip", "right hip"],
-    poseChild: ["left shoulder", "right shoulder"],
-    transformAxis: [0, 0, 0],
-    quatCorrection: [0, 0, 0],
+    poseParent: [ "left hip", "right hip" ],
+    poseChild: [ "left shoulder", "right shoulder" ],
+    transformAxis: [ 0, 0, 0 ],
+    quatCorrection: [ 0, 0, 0 ],
   },
   mixamorigHead: {
-    poseParent: ["left mouth", "right mouth"],
-    poseChild: ["left eye", "right eye"],
-    transformAxis: [0, 0, 0],
+    poseParent: [ "left mouth", "right mouth" ],
+    poseChild: [ "left eye", "right eye" ],
+    transformAxis: [ 0, 0, 0 ],
   },
   mixamorigNeck: {
-    poseParent: ["left eye", "right eye"],
-    poseChild: ["left mouth", "right mouth"],
-    transformAxis: [0, 0, 0],
-    quatCorrection: [0, 0, 0],
+    poseParent: [ "left eye", "right eye" ],
+    poseChild: [ "left mouth", "right mouth" ],
+    transformAxis: [ 0, 0, 0 ],
+    quatCorrection: [ 0, 0, 0 ],
   },
 };
 
-const buildScene = async (scene, renderer, modelData) => {
-  // add an hdr environment map to the scene
-  const pmremGenerator = new THREE.PMREMGenerator(renderer);
-  pmremGenerator.compileEquirectangularShader();
-  // Create a new EXRLoader instance
-  const exrLoader = new EXRLoader();
-
-  // Load the EXR file
-  exrLoader.load("./imgs/bg.exr", function (texture) {
-    texture.minFilter = THREE.NearestFilter;
-    texture.magFilter = THREE.NearestFilter;
-
-    // Set the environment map to the loaded texture
-    scene.environment = pmremGenerator.fromEquirectangular(texture).texture;
-    pmremGenerator.dispose();
-  });
+const buildScene = async (scene, renderer, modelData) =>
+{
 
   renderer.toneMapping = THREE.LinearToneMapping;
 
@@ -115,8 +101,10 @@ const buildScene = async (scene, renderer, modelData) => {
   const avatars = [];
 
   // load bg model news.glb
-  const bgModel = new Promise((resolve, reject) => {
-    loader.load("./models/news.glb", (gltf) => {
+  const bgModel = new Promise((resolve, reject) =>
+  {
+    loader.load("./models/news.glb", (gltf) =>
+    {
       gltf.scene.rotation.set(0, Math.PI, 0);
 
       gltf.scene.scale.x = 1.6;
@@ -125,8 +113,10 @@ const buildScene = async (scene, renderer, modelData) => {
 
       gltf.scene.position.set(-0.5, -3.1, 0);
 
-      gltf.scene.traverse((o) => {
-        if (o.isMesh) {
+      gltf.scene.traverse((o) =>
+      {
+        if (o.isMesh)
+        {
           o.castShadow = false;
           o.receiveShadow = false;
           o.material.side = THREE.FrontSide;
@@ -141,9 +131,11 @@ const buildScene = async (scene, renderer, modelData) => {
   let model = null;
   let joints = {};
 
-  if (modelData) {
+  if (modelData && modelData.path.includes(".fbx"))
+  {
     const fbxLoader = new FBXLoader();
-    fbxLoader.load(modelData.path, (object) => {
+    fbxLoader.load(modelData.path, (object) =>
+    {
       object.rotation.set(
         modelData.rotation.x * THREE.MathUtils.DEG2RAD,
         modelData.rotation.y * THREE.MathUtils.DEG2RAD,
@@ -158,9 +150,12 @@ const buildScene = async (scene, renderer, modelData) => {
       object.position.y = modelData.position.y;
       object.position.z = modelData.position.z;
 
-      object.traverse((o) => {
-        if (o.isMesh) {
-          if (o.material) {
+      object.traverse((o) =>
+      {
+        if (o.isMesh)
+        {
+          if (o.material)
+          {
             o.material.roughness = 1;
             o.material.metalness = 0;
           }
@@ -174,20 +169,40 @@ const buildScene = async (scene, renderer, modelData) => {
 
         if (!o.isBone) return;
 
-        joints[o.name] = o;
+        joints[ o.name ] = o;
       });
 
       avatars.push({ model: object, joints });
       scene.add(object);
     });
-  } else {
-    model = new Promise((resolve, reject) => {
-      loader.load("./models/boy.glb", (object) => {
-        object.scene.scale.set(-2, 2.5, -2);
-        object.scene.position.set(0.0, -4.1, 0);
-        object.scene.traverse((o) => {
-          if (o.isMesh) {
-            if (o.material) {
+  } else if (modelData && modelData.path.includes(".gl"))
+  {
+    model = new Promise((resolve, reject) =>
+    {
+      loader.load(modelData.path, (object) =>
+      {
+
+        object.scene.rotation.set(
+          modelData.rotation.x * THREE.MathUtils.DEG2RAD,
+          modelData.rotation.y * THREE.MathUtils.DEG2RAD,
+          modelData.rotation.z * THREE.MathUtils.DEG2RAD,
+        );
+
+        object.scene.scale.x = modelData.scale.x;
+        object.scene.scale.y = modelData.scale.y;
+        object.scene.scale.z = modelData.scale.z;
+
+        object.scene.position.x = modelData.position.x;
+        object.scene.position.y = modelData.position.y;
+        object.scene.position.z = modelData.position.z;
+
+
+        object.scene.traverse((o) =>
+        {
+          if (o.isMesh)
+          {
+            if (o.material)
+            {
               o.material.roughness = 1;
               o.material.metalness = 0;
             }
@@ -200,8 +215,10 @@ const buildScene = async (scene, renderer, modelData) => {
 
           if (!o.isBone) return;
 
-          joints[o.name] = o;
+          joints[ o.name ] = o;
+
         });
+
         avatars.push({ model: object.scene, joints });
         scene.add(object.scene);
         resolve({ model: object.scene, joints });
@@ -209,17 +226,19 @@ const buildScene = async (scene, renderer, modelData) => {
     });
   }
 
-  await Promise.all([model, bgModel]);
+  await Promise.all([ model, bgModel ]);
   return avatars;
 };
 
-function averagePoseDataPoints(points, poseData) {
+function averagePoseDataPoints(points, poseData)
+{
   let midPoint = new THREE.Vector3();
 
-  for (let point of points) {
+  for (let point of points)
+  {
     if (!(point in poseData)) return null;
 
-    midPoint.add(poseData[point]);
+    midPoint.add(poseData[ point ]);
   }
 
   midPoint.divideScalar(points.length);
@@ -227,7 +246,8 @@ function averagePoseDataPoints(points, poseData) {
   return midPoint;
 }
 
-const handleCamera = (controls) => {
+const handleCamera = (controls) =>
+{
   controls.zoomTo(0.48, true);
 
   controls.polarAngle = THREE.MathUtils.DEG2RAD * 80;
@@ -254,8 +274,10 @@ const handleCamera = (controls) => {
   });
 };
 
-const setupDebugging = (thirdEyePop, scene, avatars) => {
-  if (loading) {
+const setupDebugging = (thirdEyePop, scene, avatars) =>
+{
+  if (loading)
+  {
     loading.remove();
   }
   // load json file ./test_data/pose_capture_data.json and every 1ms push a frame to thirdEyePop
@@ -263,26 +285,31 @@ const setupDebugging = (thirdEyePop, scene, avatars) => {
   fetch("./test_data/spider_capture.json")
     .then((response) => response.json())
     .then((data) => (frames = data))
-    .then(() => {
+    .then(() =>
+    {
       let i = 0;
-      setInterval(() => {
+      setInterval(() =>
+      {
         // console.log(frames[ i++ % frames.length ])
-        const frame = frames[i++ % frames.length];
+        const frame = frames[ i++ % frames.length ];
         // const frame = frames[ frames.length - 100 ];
-        if (frame) {
+        if (frame)
+        {
           thirdEyePop.pushPredictionData(frame);
         }
       }, 1);
     });
 
-  avatars.forEach((avatar) => {
-    const helper = new THREE.SkeletonHelper(avatar.model.children[0]);
+  avatars.forEach((avatar) =>
+  {
+    const helper = new THREE.SkeletonHelper(avatar.model.children[ 0 ]);
     scene.add(helper);
   });
   return;
 };
 
-export const updateScene = async (thirdEyePop, modelData, isDebugging) => {
+export const updateScene = async (thirdEyePop, modelData, isDebugging) =>
+{
   let scene = thirdEyePop.getScene();
   const renderer = thirdEyePop.getRenderer();
 
@@ -291,38 +318,43 @@ export const updateScene = async (thirdEyePop, modelData, isDebugging) => {
 
   let avatars = await buildScene(scene, renderer, modelData);
 
-  if (isDebugging) {
+  if (isDebugging)
+  {
     setupDebugging(thirdEyePop, scene, avatars);
   }
 
-  thirdEyePop.onUpdate = function () {
+  thirdEyePop.onUpdate = function ()
+  {
     const activePeople = thirdEyePop.getActivePeople();
 
-    for (let i = 0; i < avatars.length; i++) {
-      const element = avatars[i];
+    for (let i = 0; i < avatars.length; i++)
+    {
+      const element = avatars[ i ];
       const joints = element.joints;
 
       if (!activePeople) return;
       if (activePeople.length <= 0) return;
-      if ((!"poseData") in activePeople[0]) return;
-      if ((!"faceData") in activePeople[0]) return;
-      if (!activePeople[0].poseData.points) return;
-      if (!activePeople[0].faceData.points) return;
+      if ((!"poseData") in activePeople[ 0 ]) return;
+      if ((!"faceData") in activePeople[ 0 ]) return;
+      if (!activePeople[ 0 ].poseData.points) return;
+      if (!activePeople[ 0 ].faceData.points) return;
 
-      const poseData = activePeople[0].poseData;
+      const poseData = activePeople[ 0 ].poseData;
 
-      for (const jointKey in joints) {
-        const joint = joints[jointKey];
-        let node = jointNodes[jointKey];
+      for (const jointKey in joints)
+      {
+        const joint = joints[ jointKey ];
+        let node = jointNodes[ jointKey ];
 
         // Check and remove the version if found in the mixamorig
-        if (!node) {
+        if (!node)
+        {
           // split the joint key by mixamorig
           const split = jointKey.split("mixamorig");
           // remove first character of the second part of the split
-          const jointName = split[1].substring(1);
+          const jointName = split[ 1 ].substring(1);
           // check if the joint name is in the joint nodes
-          node = jointNodes["mixamorig" + jointName];
+          node = jointNodes[ "mixamorig" + jointName ];
         }
 
         if (!node) continue;
@@ -343,9 +375,11 @@ export const updateScene = async (thirdEyePop, modelData, isDebugging) => {
         if (joint.children.length <= 0) continue;
 
         // we store the starting rotation of the joint so that it preserves a proper rotation after moving it
-        if (!node.initialQuaternion) {
+        if (!node.initialQuaternion)
+        {
           node.initialQuaternion = joint.quaternion.clone();
-        } else {
+        } else
+        {
           joint.quaternion.copy(node.initialQuaternion);
         }
 
@@ -364,8 +398,9 @@ export const updateScene = async (thirdEyePop, modelData, isDebugging) => {
           .normalize();
 
         // we store the initial child position in joint space so this rotation is also preserved
-        if (!node.initialChildInJointSpace) {
-          let childJoint = joint.children[0];
+        if (!node.initialChildInJointSpace)
+        {
+          let childJoint = joint.children[ 0 ];
           let childWorldPosition = childJoint.getWorldPosition(
             new THREE.Vector3(),
           );
